@@ -778,7 +778,51 @@ QPushButton#reader_detach_btn:hover {
 }
 
 
-/* ── Reader Tabs ── */
+/* ── Main Tabs ── */
+QTabWidget#main_tabs {
+    background: transparent;
+}
+QTabWidget#main_tabs::pane {
+    border: none;
+    background: #f1f5f9;
+    border-top: 1px solid #e2e8f0;
+}
+QTabWidget#main_tabs QTabBar {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+QTabWidget#main_tabs QTabBar::tab {
+    background: transparent;
+    color: #94a3b8;
+    padding: 8px 18px 9px 14px;
+    margin: 6px 2px 0 2px;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 7px 7px 0 0;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 90px;
+    max-width: 210px;
+}
+QTabWidget#main_tabs QTabBar::tab:selected {
+    background: #ffffff;
+    color: #0f172a;
+    border-color: #e2e8f0;
+    border-bottom: 2px solid #ffffff;
+    font-weight: 600;
+}
+QTabWidget#main_tabs QTabBar::tab:hover:!selected {
+    background: #f1f5f9;
+    color: #475569;
+}
+QTabWidget#main_tabs QTabBar::close-button {
+    subcontrol-position: right;
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
+}
+
+/* ── Reader Tabs (legacy — kept for FloatingReader) ── */
 QTabWidget#reader_tabs {
     background: #f1f5f9;
 }
@@ -849,6 +893,31 @@ _DARK_STYLESHEET = STYLESHEET + """
 QMainWindow, QDialog {
     background-color: #0f172a;
 }
+
+/* Dark main tabs */
+QTabWidget#main_tabs::pane {
+    background: #0f172a;
+    border-top: 1px solid #1e293b;
+}
+QTabWidget#main_tabs QTabBar {
+    background: #070d14;
+    border-bottom: 1px solid #1e293b;
+}
+QTabWidget#main_tabs QTabBar::tab {
+    background: transparent;
+    color: #475569;
+}
+QTabWidget#main_tabs QTabBar::tab:selected {
+    background: #0f172a;
+    color: #f1f5f9;
+    border-color: #1e293b;
+    border-bottom: 2px solid #0f172a;
+}
+QTabWidget#main_tabs QTabBar::tab:hover:!selected {
+    background: #111a28;
+    color: #64748b;
+}
+
 QFrame#content {
     background-color: #0f172a;
 }

@@ -455,14 +455,16 @@ class _FixedRow(QFrame):
 # ── Persistent library side panel ─────────────────────────────────────────────
 
 class LibrarySidePanel(QWidget):
-    tag_selected = Signal(str)
-    book_tagged  = Signal(str, str)   # (book_id, tag) — forwarded to MainWindow
+    tag_selected       = Signal(str)
+    book_tagged        = Signal(str, str)   # (book_id, tag) — forwarded to MainWindow
+    open_livros_tab    = Signal()           # request focus/open Livros tab
+    open_anotacoes_tab = Signal()           # request focus/open Anotações tab
 
     def __init__(self) -> None:
         super().__init__()
         self.setObjectName("lib_side_panel")
         self._books: list[dict] = []
-        self._active_key: str = ""   # "" | "__avulsos__" | folder-id
+        self._active_key: str = ""   # "" | "__avulsos__" | "__anotacoes__" | folder-id
         self._build_ui()
 
     def _build_ui(self) -> None:
@@ -490,10 +492,10 @@ class LibrarySidePanel(QWidget):
 
         layout.addWidget(self._hsep())
 
-        # "Todos" row
+        # "Todos" row — also focuses the Livros tab
         self._todos_row = _FixedRow("Todos", 0, "#94a3b8")
         self._todos_row.set_active(True)
-        self._todos_row.clicked.connect(lambda: self._select_fixed(""))
+        self._todos_row.clicked.connect(self._on_todos_clicked)
         layout.addWidget(self._todos_row)
 
         layout.addWidget(self._inner_sep())
@@ -511,6 +513,13 @@ class LibrarySidePanel(QWidget):
         self._avulsos_row = _FixedRow("Avulsos", 0, "#475569")
         self._avulsos_row.clicked.connect(lambda: self._select_fixed("__avulsos__"))
         layout.addWidget(self._avulsos_row)
+
+        layout.addWidget(self._inner_sep())
+
+        # "Anotações" row — fixed shortcut to Notes tab
+        self._anotacoes_row = _FixedRow("Anotações", 0, "#8b5cf6")
+        self._anotacoes_row.clicked.connect(self._on_anotacoes_clicked)
+        layout.addWidget(self._anotacoes_row)
 
     def _hsep(self) -> QFrame:
         f = QFrame(); f.setFrameShape(QFrame.HLine); f.setObjectName("panel_sep")
@@ -533,13 +542,30 @@ class LibrarySidePanel(QWidget):
         avulsos = sum(1 for b in self._books if not (b.get("tags") or []))
         self._avulsos_row.set_count(avulsos)
         self._tree.populate(sg.load())
+        # Restore active highlight after reload
+        self._todos_row.set_active(self._active_key == "")
+        self._avulsos_row.set_active(self._active_key == "__avulsos__")
+        self._anotacoes_row.set_active(self._active_key == "__anotacoes__")
 
     # ── Selection ─────────────────────────────────────────────────────────────
+
+    def _on_todos_clicked(self) -> None:
+        self._select_fixed("")
+        self.open_livros_tab.emit()
+
+    def _on_anotacoes_clicked(self) -> None:
+        self._active_key = "__anotacoes__"
+        self._todos_row.set_active(False)
+        self._avulsos_row.set_active(False)
+        self._anotacoes_row.set_active(True)
+        self._tree.set_active(None)
+        self.open_anotacoes_tab.emit()
 
     def _select_fixed(self, key: str) -> None:
         self._active_key = key
         self._todos_row.set_active(key == "")
         self._avulsos_row.set_active(key == "__avulsos__")
+        self._anotacoes_row.set_active(False)
         self._tree.set_active(None)
         self.tag_selected.emit(key)
 
@@ -547,6 +573,7 @@ class LibrarySidePanel(QWidget):
         self._active_key = tag
         self._todos_row.set_active(False)
         self._avulsos_row.set_active(False)
+        self._anotacoes_row.set_active(False)
         self.tag_selected.emit(tag)
 
     # ── Book → folder drop ────────────────────────────────────────────────────
