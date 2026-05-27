@@ -777,6 +777,29 @@ QPushButton#reader_detach_btn:hover {
     border-color: #475569;
 }
 
+/* ── Page jump input ── */
+QWidget#reader_page_jump {
+    background: transparent;
+}
+QLineEdit#reader_page_input {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 6px;
+}
+QLineEdit#reader_page_input:focus {
+    border-color: #3b82f6;
+}
+
+/* ── PDF page labels ── */
+QLabel#pdf_page_label {
+    background: #ffffff;
+    border-radius: 4px;
+}
+
 
 /* ── Main Tabs ── */
 QTabWidget#main_tabs {
