@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+*.egg-info/
+
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
+# EasyOCR cache de modelos
+.EasyOCR/
+
+# App config gerado em runtime
+config.json
+
+# Claude Code
+.claude/
+.ignore
+
+# OS
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
