@@ -1054,6 +1054,33 @@ QTreeWidget#lib_side_tree::branch:open:has-children:!has-siblings,
 QTreeWidget#lib_side_tree::branch:open:has-children:has-siblings {
     color: #475569;
 }
+
+/* ── Color picker popup ── */
+QFrame#color_picker_popup {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+QWidget#color_picker_panel {
+    background: transparent;
+}
+QFrame#color_picker_div {
+    color: #e2e8f0;
+    background: #e2e8f0;
+    max-width: 1px;
+}
+QPushButton#color_picker_custom_btn {
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: #475569;
+    font-size: 12px;
+}
+QPushButton#color_picker_custom_btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
 """
 
 
@@ -1195,6 +1222,10 @@ QFrame#note_editor_sep      { color: #1e293b; background: #1e293b; }
 QWidget#note_status_bar     { background: #0a1628; border-color: #1e293b; }
 QLabel#note_status_lbl      { color: #475569; }
 QWidget#notes_header        { background: #0a1628; border-color: #1e293b; }
+QFrame#color_picker_popup   { background: #1e293b; border-color: #334155; }
+QFrame#color_picker_div     { color: #334155; background: #334155; }
+QPushButton#color_picker_custom_btn { border-color: #334155; color: #94a3b8; }
+QPushButton#color_picker_custom_btn:hover { background: #0f172a; color: #e2e8f0; }
 """
 
 

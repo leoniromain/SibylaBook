@@ -4,9 +4,9 @@ from datetime import datetime
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QLineEdit, QTextEdit, QFrame, QToolButton, QComboBox,
-    QColorDialog, QSizePolicy, QScrollArea,
+    QColorDialog, QSizePolicy, QScrollArea, QGridLayout,
 )
-from PySide6.QtCore import Qt, Signal, QTimer
+from PySide6.QtCore import Qt, Signal, QTimer, QPoint
 from PySide6.QtGui import (
     QTextCursor, QTextCharFormat, QTextBlockFormat, QTextListFormat,
     QFont, QColor, QKeySequence, QAction, QTextDocument,
@@ -37,12 +37,109 @@ def _sep() -> QFrame:
     return f
 
 
+# ── Color picker popup ────────────────────────────────────────────────────────
+
+_VIVID_COLORS = [
+    "#ef4444", "#f97316", "#eab308", "#22c55e", "#14b8a6",
+    "#3b82f6", "#8b5cf6", "#ec4899", "#f43f5e", "#06b6d4",
+    "#84cc16", "#a855f7", "#6366f1", "#0ea5e9", "#10b981",
+]
+
+_NEUTRAL_COLORS = [
+    "#ffffff", "#f1f5f9", "#e2e8f0", "#cbd5e1", "#94a3b8",
+    "#64748b", "#475569", "#334155", "#1e293b", "#0f172a",
+    "#fef9c3", "#fde68a", "#fed7aa", "#fecaca", "#ddd6fe",
+]
+
+
+class _ColorPickerPopup(QFrame):
+    """Two-panel color swatch popup. Emits color_chosen(str) then closes."""
+    color_chosen = Signal(str)
+
+    def __init__(self, current: str, parent: QWidget | None = None) -> None:
+        super().__init__(parent, Qt.Popup | Qt.FramelessWindowHint)
+        self.setObjectName("color_picker_popup")
+        self.setAttribute(Qt.WA_TranslucentBackground, False)
+        self._current = current
+        self._build()
+
+    def _build(self) -> None:
+        outer = QHBoxLayout(self)
+        outer.setContentsMargins(10, 10, 10, 10)
+        outer.setSpacing(10)
+
+        # LEFT: vivid colors
+        left = QWidget()
+        left.setObjectName("color_picker_panel")
+        lg = QGridLayout(left)
+        lg.setContentsMargins(4, 4, 4, 4)
+        lg.setSpacing(4)
+        for i, c in enumerate(_VIVID_COLORS):
+            btn = self._swatch(c)
+            lg.addWidget(btn, i // 5, i % 5)
+
+        # divider
+        div = QFrame()
+        div.setFrameShape(QFrame.VLine)
+        div.setObjectName("color_picker_div")
+
+        # RIGHT: neutral/pastel colors + custom button
+        right = QWidget()
+        right.setObjectName("color_picker_panel")
+        rl = QVBoxLayout(right)
+        rl.setContentsMargins(4, 4, 4, 4)
+        rl.setSpacing(4)
+        rg = QGridLayout()
+        rg.setSpacing(4)
+        for i, c in enumerate(_NEUTRAL_COLORS):
+            btn = self._swatch(c)
+            rg.addWidget(btn, i // 5, i % 5)
+        rl.addLayout(rg)
+
+        custom_btn = QPushButton("Cor personalizada…")
+        custom_btn.setObjectName("color_picker_custom_btn")
+        custom_btn.setCursor(Qt.PointingHandCursor)
+        custom_btn.clicked.connect(self._open_custom)
+        rl.addWidget(custom_btn)
+
+        outer.addWidget(left)
+        outer.addWidget(div)
+        outer.addWidget(right)
+
+    def _swatch(self, color: str) -> QPushButton:
+        btn = QPushButton()
+        btn.setFixedSize(22, 22)
+        btn.setCursor(Qt.PointingHandCursor)
+        border = "2px solid #ffffff" if color.lower() == self._current.lower() else "1px solid rgba(0,0,0,0.15)"
+        btn.setStyleSheet(
+            f"QPushButton {{ background:{color}; border-radius:3px; border:{border}; }}"
+            f"QPushButton:hover {{ border:2px solid #ffffff; }}"
+        )
+        btn.setToolTip(color)
+        btn.clicked.connect(lambda _, c=color: self._choose(c))
+        return btn
+
+    def _choose(self, color: str) -> None:
+        self.color_chosen.emit(color)
+        self.close()
+
+    def _open_custom(self) -> None:
+        self.close()
+        # Small delay so popup is fully gone before dialog opens
+        QTimer.singleShot(50, self._show_dialog)
+
+    def _show_dialog(self) -> None:
+        c = QColorDialog.getColor(QColor(self._current), None, "Cor personalizada")
+        if c.isValid():
+            self.color_chosen.emit(c.name())
+
+
 # ── Color picker button ───────────────────────────────────────────────────────
 
 class _ColorBtn(QToolButton):
-    """Toolbar button that opens QColorDialog.
-    Emits `about_to_pick` BEFORE the dialog opens so the caller can
-    snapshot the text cursor (which loses focus during the dialog).
+    """Toolbar button that shows a custom color swatch popup.
+    Emits `about_to_pick` BEFORE the popup opens so the caller can
+    snapshot the text cursor (which loses focus during interaction).
     """
     about_to_pick = Signal()
     color_chosen  = Signal(str)  # hex color
@@ -59,11 +156,17 @@ class _ColorBtn(QToolButton):
 
     def _pick(self) -> None:
         self.about_to_pick.emit()          # caller saves cursor NOW
-        c = QColorDialog.getColor(QColor(self._color), self, self.toolTip())
-        if c.isValid():
-            self._color = c.name()
-            self._update_underline()
-            self.color_chosen.emit(self._color)
+        popup = _ColorPickerPopup(self._color)
+        popup.color_chosen.connect(self._on_color_chosen)
+        # Position below button
+        pos = self.mapToGlobal(QPoint(0, self.height()))
+        popup.move(pos)
+        popup.show()
+
+    def _on_color_chosen(self, color: str) -> None:
+        self._color = color
+        self._update_underline()
+        self.color_chosen.emit(self._color)
 
     def _update_underline(self) -> None:
         self.setStyleSheet(
