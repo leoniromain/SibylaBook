@@ -1081,6 +1081,47 @@ QPushButton#color_picker_custom_btn:hover {
     background: #f1f5f9;
     color: #1e293b;
 }
+
+/* ── Reader annotation toolbar ── */
+QPushButton#reader_annot_toggle {
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    padding: 4px 10px;
+    color: #475569;
+    font-size: 13px;
+}
+QPushButton#reader_annot_toggle:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+QPushButton#reader_annot_toggle:checked {
+    background: #ede9fe;
+    border-color: #8b5cf6;
+    color: #6d28d9;
+    font-weight: 600;
+}
+QWidget#reader_annot_sub {
+    background: transparent;
+}
+QPushButton#reader_annot_tool_btn {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #64748b;
+    font-size: 13px;
+    min-width: 28px;
+}
+QPushButton#reader_annot_tool_btn:hover {
+    background: #f8fafc;
+    color: #1e293b;
+}
+QPushButton#reader_annot_tool_btn:checked {
+    background: #ede9fe;
+    border-color: #8b5cf6;
+    color: #6d28d9;
+}
 """
 
 
@@ -1226,6 +1267,12 @@ QFrame#color_picker_popup   { background: #1e293b; border-color: #334155; }
 QFrame#color_picker_div     { color: #334155; background: #334155; }
 QPushButton#color_picker_custom_btn { border-color: #334155; color: #94a3b8; }
 QPushButton#color_picker_custom_btn:hover { background: #0f172a; color: #e2e8f0; }
+QPushButton#reader_annot_toggle { border-color: #334155; color: #94a3b8; }
+QPushButton#reader_annot_toggle:hover { background: #1e293b; color: #e2e8f0; }
+QPushButton#reader_annot_toggle:checked { background: #2e1065; border-color: #7c3aed; color: #c4b5fd; }
+QPushButton#reader_annot_tool_btn { border-color: #334155; color: #94a3b8; }
+QPushButton#reader_annot_tool_btn:hover { background: #1e293b; color: #e2e8f0; }
+QPushButton#reader_annot_tool_btn:checked { background: #2e1065; border-color: #7c3aed; color: #c4b5fd; }
 """
 
 
