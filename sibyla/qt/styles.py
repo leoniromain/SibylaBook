@@ -875,6 +875,154 @@ QTabWidget#reader_tabs QTabBar::close-button {
     subcontrol-position: right;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   NOTE CARDS
+   ══════════════════════════════════════════════════════════════ */
+QFrame#note_card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+QFrame#note_card:hover {
+    border-color: #6366f1;
+    background-color: #fafafa;
+}
+QLabel#note_cover {
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+}
+QLabel#note_title {
+    color: #1e293b;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 8px;
+}
+QLabel#note_tags_preview {
+    color: #6366f1;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 0 8px;
+}
+QLabel#note_date {
+    color: #94a3b8;
+    font-size: 10px;
+    padding: 0 8px 4px 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NOTE EDITOR
+   ══════════════════════════════════════════════════════════════ */
+QWidget#note_editor_header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+}
+QLineEdit#note_title_input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+    padding: 4px 0;
+}
+QLineEdit#note_title_input:focus {
+    border-bottom: 2px solid #6366f1;
+}
+/* Tag editor */
+QPushButton#note_tag_chip {
+    background: #ede9fe;
+    color: #6366f1;
+    border: none;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+}
+QPushButton#note_tag_chip:hover {
+    background: #ddd6fe;
+}
+QLineEdit#note_tag_input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed #cbd5e1;
+    border-radius: 0;
+    font-size: 12px;
+    color: #64748b;
+    padding: 2px 2px;
+}
+QLineEdit#note_tag_input:focus {
+    border-bottom-color: #6366f1;
+}
+/* Toolbar */
+QWidget#note_toolbar {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+QToolButton#note_tool_btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    padding: 3px 7px;
+    font-size: 12px;
+    color: #475569;
+    min-width: 26px;
+    min-height: 26px;
+}
+QToolButton#note_tool_btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+QToolButton#note_tool_btn:checked {
+    background: #ede9fe;
+    color: #6366f1;
+    border-color: #c4b5fd;
+}
+QFrame#note_toolbar_sep {
+    color: #e2e8f0;
+    background: #e2e8f0;
+    max-width: 1px;
+    margin: 0 4px;
+}
+QComboBox#note_para_combo {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 12px;
+    color: #334155;
+}
+/* Editor body */
+QTextEdit#note_editor_body {
+    background: #ffffff;
+    color: #1e293b;
+    border: none;
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
+    font-size: 14px;
+    padding: 28px 80px;
+    line-height: 1.7;
+}
+QFrame#note_editor_sep {
+    color: #e2e8f0;
+    background: #e2e8f0;
+    max-height: 1px;
+}
+/* Status bar */
+QWidget#note_status_bar {
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+}
+QLabel#note_status_lbl {
+    color: #94a3b8;
+    font-size: 11px;
+    background: transparent;
+}
+/* Notes view header */
+QWidget#notes_header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
 /* ── Library side tree ── */
 QTreeWidget#lib_side_tree {
     background: #0f172a;
@@ -1016,6 +1164,37 @@ QListWidget::item { color: #cbd5e1; }
 QListWidget::item:hover { background: #253347; }
 QListWidget::item:selected { background: #1d4ed8; color: #f8fafc; }
 QWidget#main_topbar { background-color: #070d14; }
+
+/* Dark note cards */
+QFrame#note_card {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+QFrame#note_card:hover {
+    background-color: #253347;
+    border-color: #6366f1;
+}
+QLabel#note_title { color: #e2e8f0; }
+QLabel#note_date  { color: #475569; }
+
+/* Dark note editor */
+QWidget#note_editor_header { background: #0f172a; border-color: #1e293b; }
+QLineEdit#note_title_input  { color: #f1f5f9; border-bottom-color: #334155; }
+QLineEdit#note_title_input:focus { border-bottom-color: #6366f1; }
+QPushButton#note_tag_chip   { background: #312e81; color: #a5b4fc; }
+QPushButton#note_tag_chip:hover { background: #3730a3; }
+QLineEdit#note_tag_input    { color: #94a3b8; border-bottom-color: #334155; }
+QWidget#note_toolbar        { background: #0a1628; border-color: #1e293b; }
+QToolButton#note_tool_btn   { color: #64748b; }
+QToolButton#note_tool_btn:hover  { background: #1e293b; color: #e2e8f0; }
+QToolButton#note_tool_btn:checked { background: #312e81; color: #a5b4fc; border-color: #4338ca; }
+QFrame#note_toolbar_sep     { color: #1e293b; background: #1e293b; }
+QComboBox#note_para_combo   { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+QTextEdit#note_editor_body  { background: #0f172a; color: #e2e8f0; }
+QFrame#note_editor_sep      { color: #1e293b; background: #1e293b; }
+QWidget#note_status_bar     { background: #0a1628; border-color: #1e293b; }
+QLabel#note_status_lbl      { color: #475569; }
+QWidget#notes_header        { background: #0a1628; border-color: #1e293b; }
 """
 
 

@@ -15,6 +15,7 @@ from sibyla.qt.views.queue_view import QueueView
 from sibyla.qt.views.history_view import HistoryView
 from sibyla.qt.views.config_view import ConfigView
 from sibyla.qt.views.notes_view import NotesView
+from sibyla.qt.views.note_editor import NoteEditor
 from sibyla.qt.views.reader_view import ReaderView
 from sibyla.qt.views.reading_layout import LibrarySidePanel, FloatingReader
 from sibyla.qt.styles import get_stylesheet
@@ -213,11 +214,16 @@ class MainWindow(QMainWindow):
         if self._focus_tab(_TAB_ANOTACOES):
             return
         view = NotesView()
+        view.open_note.connect(self._on_open_note)
+        self._notes_view = view
         self._add_tab(view, _TAB_ANOTACOES, "📝  Anotações", closeable=True)
 
     # ── Tab events ────────────────────────────────────────────────────────────
 
     def _on_tab_close_requested(self, idx: int) -> None:
+        widget = self._tabs.widget(idx)
+        if isinstance(widget, NoteEditor):
+            widget.flush_save()
         self._tabs.removeTab(idx)
 
     def _on_tab_changed(self, idx: int) -> None:
@@ -282,6 +288,30 @@ class MainWindow(QMainWindow):
         short = (title[:18] + "…") if len(title) > 18 else title
         idx = self._add_tab(reader, tab_id, f"📖  {short}", closeable=True)
         self._tabs.setCurrentIndex(idx)
+
+    def _on_open_note(self, note: dict) -> None:
+        note_id = note.get("id", "")
+        tab_id = f"note:{note_id}"
+        if self._focus_tab(tab_id):
+            return
+        editor = NoteEditor(note)
+        editor.note_saved.connect(self._on_note_saved)
+        title = note.get("title") or "Nova nota"
+        short = (title[:18] + "…") if len(title) > 18 else title
+        idx = self._add_tab(editor, tab_id, f"📝  {short}", closeable=True)
+        self._tabs.setCurrentIndex(idx)
+
+    def _on_note_saved(self, note: dict) -> None:
+        # Update tab title if it changed
+        tab_id = f"note:{note.get('id', '')}"
+        idx = self._find_tab(tab_id)
+        if idx >= 0:
+            title = note.get("title") or "Nova nota"
+            short = (title[:18] + "…") if len(title) > 18 else title
+            self._tabs.setTabText(idx, f"📝  {short}")
+        # Refresh notes grid if open
+        if hasattr(self, "_notes_view"):
+            self._notes_view.reload()
 
     def _close_book_tab(self, tab_id: str) -> None:
         idx = self._find_tab(tab_id)

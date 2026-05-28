@@ -492,6 +492,13 @@ class LibrarySidePanel(QWidget):
 
         layout.addWidget(self._hsep())
 
+        # "Anotações" row — fixed shortcut to Notes tab (pinned above Todos)
+        self._anotacoes_row = _FixedRow("Anotações", 0, "#8b5cf6")
+        self._anotacoes_row.clicked.connect(self._on_anotacoes_clicked)
+        layout.addWidget(self._anotacoes_row)
+
+        layout.addWidget(self._inner_sep())
+
         # "Todos" row — also focuses the Livros tab
         self._todos_row = _FixedRow("Todos", 0, "#94a3b8")
         self._todos_row.set_active(True)
@@ -513,13 +520,6 @@ class LibrarySidePanel(QWidget):
         self._avulsos_row = _FixedRow("Avulsos", 0, "#475569")
         self._avulsos_row.clicked.connect(lambda: self._select_fixed("__avulsos__"))
         layout.addWidget(self._avulsos_row)
-
-        layout.addWidget(self._inner_sep())
-
-        # "Anotações" row — fixed shortcut to Notes tab
-        self._anotacoes_row = _FixedRow("Anotações", 0, "#8b5cf6")
-        self._anotacoes_row.clicked.connect(self._on_anotacoes_clicked)
-        layout.addWidget(self._anotacoes_row)
 
     def _hsep(self) -> QFrame:
         f = QFrame(); f.setFrameShape(QFrame.HLine); f.setObjectName("panel_sep")
